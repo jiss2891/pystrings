@@ -1,7 +1,7 @@
 #include "pystrings.h"
 
 char * _clone(char * str){
-  char * out = calloc(sizeof(char), strlen(str));
+  char * out = malloc(sizeof(char) * strlen(str) + 1);  // + 1 to allow strcpy to NULL terminate the string.
   strcpy(out, str);
   return out;
 }
@@ -115,13 +115,24 @@ bool endswith(char * str, char * substr){
 
 char * slice(char * str, int from, int to){
   /* Returns a slice of str from char `from` to char `to`*/
-  int size = to - from + 1;
-  char * out = malloc(sizeof(char) * size);
-  for (int i = 0; i < size; i++){
-    out[i] = str[from];
-    from++;
+  int size;
+  char * out; 
+ 
+  if (to <= from){
+    out = malloc(1);
+    out = '\0';
+    return out;
+  } else {
+    size  = to - from + 1;
+    out = malloc(sizeof(char) * size + 1);
+    out[size] = '\0';
+    
+    for (int i = 0; i < size; i++){
+      out[i] = str[from];
+      from++;
+    }
+    return out;
   }
-  return out;
 }
 
 char ** split(char * str, char sep, int * arrlen){ 
@@ -129,55 +140,29 @@ char ** split(char * str, char sep, int * arrlen){
   char ** array = malloc(sizeof(char*) * *arrlen);
   size_t str_len = strlen(str);
   int arrpos = 0;
-  int last = 0;
-  int upto = 0;
+  int prev = 0;
+  int i = 0;
+  int s = 0;
 
-  for (int i = 0; i < str_len; i++){
-    if (str[i] == sep){
-      upto = i-1;
-      if (last == upto)
-        array[arrpos] = "";
-      else
-        array[arrpos] = slice(str, last, upto);
-      arrpos++;
-      i++;
-      last = i;
-    } else if (i + 1 == str_len) {
-      upto = i;
-      if (last == upto)
-        array[arrpos] = "";
-      else
-        array[arrpos] = slice(str, last, upto);
-      arrpos++;
-      i++;
-      last = i;
-    }
-  };
+  for (s = 0; s < *arrlen; s++){
+    for (; str[i] != sep && i <= str_len; i++);
+    array[arrpos] = slice(str, prev, i - 1); 
+    arrpos++;
+    i++;
+    prev = i;
+  }
+
   return array;
 }
 
-char * aprint(char ** arr, size_t size){
-  int count = 0;
-  char * out;
-
+void aprint(char ** arr, size_t size){
+  printf("[");
   for (int i = 0; i < size; i++)
-    count += strlen(arr[i]);
-
-  out = calloc(sizeof(char), (count + 2*size));
-
-  out = strcat(out, "[");
-  for (int i = 0; i < size; i++)
-    if (i + 1 == size){
-      out = strcat(out, "'");
-      out = strcat(out, arr[i]);
-      out = strcat(out, "'");
-    } else {
-      out = strcat(out, "'");
-      out = strcat(out, arr[i]);
-      out = strcat(out, "', ");
-    };
-  out = strcat(out, "]");
-  return out;
+    if (i + 1 == size)
+      printf("'%s'", arr[i]);
+    else
+      printf("'%s', ", arr[i]);
+  printf("]\n");
 }
 
 char * raw_input(size_t max_len, char * prompt){

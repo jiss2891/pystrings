@@ -22,6 +22,6 @@ bool endswith(char * str, char * substr);
 
 char ** split(char * str, char sep, int * arrlen);
 
-char * aprint(char ** arr, size_t size);
+void aprint(char ** arr, size_t size);
 
 char * raw_input(size_t max_len, char * prompt);
