@@ -43,7 +43,7 @@ bool isnum(char * str){
 }
 
 char * capitalize(char * str){
-  char * capitalized = _clone(str); 
+  char * capitalized = _clone(str);
 
   if (isalpha(str[0]) && !_iscapital(str[0]))
     capitalized[0] = capitalized[0] - 32;
@@ -52,7 +52,7 @@ char * capitalize(char * str){
 
 char * center(char * str, int width, char fillchar){
   int len;
-  int pivot = 0; 
+  int pivot = 0;
   char * centered;
 
   if (str) len = strlen(str); else len = 0;
@@ -71,7 +71,7 @@ char * center(char * str, int width, char fillchar){
         centered[i] = str[i - pivot];
     }
     return centered;
-  } 
+  }
 }
 
 int ccount(char * str, char c){
@@ -116,8 +116,8 @@ bool endswith(char * str, char * substr){
 char * slice(char * str, int from, int to){
   /* Returns a slice of str from char `from` to char `to`*/
   int size;
-  char * out; 
- 
+  char * out;
+
   if (to <= from){
     out = malloc(1);
     out = '\0';
@@ -126,7 +126,7 @@ char * slice(char * str, int from, int to){
     size  = to - from + 1;
     out = malloc(sizeof(char) * size + 1);
     out[size] = '\0';
-    
+
     for (int i = 0; i < size; i++){
       out[i] = str[from];
       from++;
@@ -135,19 +135,16 @@ char * slice(char * str, int from, int to){
   }
 }
 
-char ** split(char * str, char sep, int * arrlen){ 
+char ** split(char * str, char sep, int * arrlen){
   *arrlen = ccount(str, sep) + 1;
   char ** array = malloc(sizeof(char*) * *arrlen);
   size_t str_len = strlen(str);
-  int arrpos = 0;
-  int prev = 0;
-  int i = 0;
-  int s = 0;
+  int prev = 0; // token starting position
+  int i = 0; // scan index
 
-  for (s = 0; s < *arrlen; s++){
+  for (int token = 0; token < *arrlen; token++){
     for (; str[i] != sep && i <= str_len; i++);
-    array[arrpos] = slice(str, prev, i - 1); 
-    arrpos++;
+    array[token] = slice(str, prev, i - 1);
     i++;
     prev = i;
   }
