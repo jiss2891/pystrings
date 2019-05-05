@@ -17,7 +17,15 @@ int main(){
   aprint(array, alen);
 
   for (i, 0, alen)
-    printf("%s\n", center(array[i], 100, ' '));
+    printf("%s\n", center(array[i], 100, ' '));  // this method is not yet practical about memory usage.
+
+  printf("Brief summary:\n");
+  printf("==============================================\n");
+  printf("The word `quiero` appears %d times\n", count(input, "quiero"));
+  printf("The word `muerte` appears %d times\n", count(input, "muerte"));
+  printf("The word `vida` appears %d times\n", count(input, "vida"));
+  printf("==============================================\n");
+
   for (i, 0, alen)
     free(array[i]);
 
