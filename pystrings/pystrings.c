@@ -10,39 +10,6 @@ bool in_range(int value, int min, int max){
   return value >= min && value <= max;
 }
 
-char * aprint(char ** arr, size_t size){
-  int count = 0;
-  char * out;
-
-  for (int i = 0; i < size; i++)
-    count += strlen(arr[i]);
-
-  out = calloc(sizeof(char), (count + 2*size));
-
-  out = strcat(out, "[");
-  for (int i = 0; i < size; i++)
-    if (i + 1 == size){
-      out = strcat(out, "'");
-      out = strcat(out, arr[i]);
-      out = strcat(out, "'");
-    } else {
-      out = strcat(out, "'");
-      out = strcat(out, arr[i]);
-      out = strcat(out, "', ");
-    };
-  out = strcat(out, "]");
-  return out;
-}
-
-char * raw_input(size_t max_len, char * prompt){
-  char * out = malloc(sizeof(char) * max_len);
-  printf("\n%s", prompt);
-  fgets(out, max_len, stdin);
-  if ((strlen(out) > 0) && (out[strlen(out) - 1] == '\n'))
-      out[strlen(out) - 1] = '\0';
-  return out;
-}
-
 bool all(char * str, bool (*f)(char)){
   // Receives a string and validates f against every char.
   bool truth = True;
@@ -50,6 +17,8 @@ bool all(char * str, bool (*f)(char)){
 
   while (truth && *mov)
     truth = truth && f(*mov++);
+
+  free(mov);
 
   return truth;
 
@@ -182,8 +151,40 @@ char ** split(char * str, char sep, int * arrlen){
       arrpos++;
       i++;
       last = i;
-
     }
   };
   return array;
+}
+
+char * aprint(char ** arr, size_t size){
+  int count = 0;
+  char * out;
+
+  for (int i = 0; i < size; i++)
+    count += strlen(arr[i]);
+
+  out = calloc(sizeof(char), (count + 2*size));
+
+  out = strcat(out, "[");
+  for (int i = 0; i < size; i++)
+    if (i + 1 == size){
+      out = strcat(out, "'");
+      out = strcat(out, arr[i]);
+      out = strcat(out, "'");
+    } else {
+      out = strcat(out, "'");
+      out = strcat(out, arr[i]);
+      out = strcat(out, "', ");
+    };
+  out = strcat(out, "]");
+  return out;
+}
+
+char * raw_input(size_t max_len, char * prompt){
+  char * out = malloc(sizeof(char) * max_len);
+  printf("%s", prompt);
+  fgets(out, max_len, stdin);
+  if ((strlen(out) > 0) && (out[strlen(out) - 1] == '\n'))
+      out[strlen(out) - 1] = '\0';
+  return out;
 }

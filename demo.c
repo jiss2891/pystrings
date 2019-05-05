@@ -6,16 +6,24 @@
 
 int main(){
   int alen = 0;
-  char * input;
   char ** array;
-  input = raw_input(100, "Ingresa una frase: ");
+  char * input;
+  char * representation;
+
+  input = raw_input(100, "Write something separated with comma: ");
+
   array = split(input, ',', &alen);
-  printf("%s", aprint(array, alen));
+
+  representation = aprint(array, alen);
+
+  printf("%s\n", representation);
 
   for (i, 0, alen)
-    printf("%s", array[i]);
+    free(array[i]);
 
   free(array);
+  free(input);
+  free(representation);
 
   return 0;
 }
